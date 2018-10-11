@@ -7,7 +7,8 @@ RUN \
         jq \
         git \
         bash \
-        gpgme
+        gpgme \
+        make
 
 RUN HELM_VERSION=$(curl -s https://api.github.com/repos/helm/helm/tags | jq -r ".[0] .name" | tr -d v) \
     && curl -fSlL https://storage.googleapis.com/kubernetes-helm/helm-v${HELM_VERSION}-linux-amd64.tar.gz | tar -C /bin -zx -f - -O linux-amd64/helm -O > /bin/helm \
