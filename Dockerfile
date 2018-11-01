@@ -24,5 +24,5 @@ RUN SOPS_VERSION=$(curl -s https://api.github.com/repos/mozilla/sops/tags | jq -
 
 RUN helm plugin install https://github.com/futuresimple/helm-secrets
 
-RUN curl -fSlL https://dl.k8s.io/${KUBECTL_VERSION}/kubernetes-client-linux-amd64.tar.gz | tar -C /bin -zx -f - -O kubernetes/client/kubectl -O > /bin/kubectl \
+RUN curl -fSlL https://dl.k8s.io/${KUBECTL_VERSION}/kubernetes-client-linux-amd64.tar.gz | tar -C /bin -zx -f - -O kubernetes/client/bin/kubectl -O > /bin/kubectl \
     && chmod +x /bin/kubectl
