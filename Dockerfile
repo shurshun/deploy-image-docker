@@ -1,6 +1,8 @@
 FROM alpine
 
-ARG KUBECTL_VERSION=v1.12.0-rc.2
+ARG HELM_VERSION=2.11.0
+ARG SOPS_VERSION=3.1.1
+ARG KUBECTL_VERSION=1.12.0-rc.2
 
 RUN \
     apk add --no-cache --update \
@@ -24,9 +26,5 @@ RUN SOPS_VERSION=$(curl -s https://api.github.com/repos/mozilla/sops/tags | jq -
 
 RUN helm plugin install https://github.com/futuresimple/helm-secrets
 
-COPY helm-wrapper /bin/
-
-RUN chmod +x /bin/helm-wrapper
-
-RUN curl -fSlL https://dl.k8s.io/${KUBECTL_VERSION}/kubernetes-client-linux-amd64.tar.gz | tar -C /bin -zx -f - -O kubernetes/client/bin/kubectl -O > /bin/kubectl \
+RUN curl -fSlL https://dl.k8s.io/v${KUBECTL_VERSION}/kubernetes-client-linux-amd64.tar.gz | tar -C /bin -zx -f - -O kubernetes/client/bin/kubectl -O > /bin/kubectl \
    && chmod +x /bin/kubectl
