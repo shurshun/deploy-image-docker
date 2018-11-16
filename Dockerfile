@@ -24,7 +24,11 @@ RUN SOPS_VERSION=$(curl -s https://api.github.com/repos/mozilla/sops/tags | jq -
     && curl -fSlL https://github.com/mozilla/sops/releases/download/${SOPS_VERSION}/sops-${SOPS_VERSION}.linux > /bin/sops \
     && chmod +x /bin/sops
 
-RUN helm plugin install https://github.com/futuresimple/helm-secrets
+RUN \
+    helm plugin install https://github.com/futuresimple/helm-secrets && \
+    helm plugin install https://github.com/chartmuseum/helm-push
+
+RUN helm repo remove local
 
 RUN curl -fSlL https://dl.k8s.io/v${KUBECTL_VERSION}/kubernetes-client-linux-amd64.tar.gz | tar -C /bin -zx -f - -O kubernetes/client/bin/kubectl -O > /bin/kubectl \
    && chmod +x /bin/kubectl
