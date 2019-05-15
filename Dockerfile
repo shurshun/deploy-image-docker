@@ -1,8 +1,7 @@
 FROM alpine
 
-ARG HELM_VERSION=2.13.0
+ARG HELM_VERSION=2.13.1
 ARG SOPS_VERSION=3.1.1
-ARG KUBECTL_VERSION=1.13.4
 
 RUN \
     apk add --no-cache --update \
@@ -28,5 +27,9 @@ RUN \
 
 RUN helm repo remove local
 
-RUN curl -fSlL https://dl.k8s.io/v${KUBECTL_VERSION}/kubernetes-client-linux-amd64.tar.gz | tar -C /bin -zx -f - -O kubernetes/client/bin/kubectl -O > /bin/kubectl \
-   && chmod +x /bin/kubectl
+RUN KUBECTL_VERSION=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt) && \
+    curl -fSlL https://dl.k8s.io/${KUBECTL_VERSION}/kubernetes-client-linux-amd64.tar.gz | tar -C /bin -zx -f - -O kubernetes/client/bin/kubectl -O > /bin/kubectl && \
+    chmod +x /bin/kubectl
+
+COPY bin/ /bin
+RUN chmod +x /bin/slack-msg
